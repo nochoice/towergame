@@ -30,7 +30,13 @@ Game.prototype = {
             console.log(e.layerX, e.layerY);
         });
 
-
+        instance.ctx.canvas.addEventListener('mousemove', function(e){
+      
+            if(instance.level){
+                instance.level.mouseMoveHandler(e.layerX, e.layerY);
+            }
+          
+        });
 
     },
 
@@ -39,16 +45,7 @@ Game.prototype = {
 
         instance.level = new Level(level, instance);
 
-        // instance.ctx.canvas.addEventListener('mousemove', function(e){
-        //     // console.log(e.layerX, e.layerY);
-        //     var tiles = instance.level.tiles,
-        //         tile;
-
-        //     for(var k in tiles){
-        //         tile = tiles[k];
-        //         tile.hover(e.layerX, e.layerY);
-        //     }
-        // });
+        
     }
 };
 

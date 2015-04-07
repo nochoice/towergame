@@ -7,6 +7,9 @@ function Tile(options, ctx){
 
     this.posX = this.opt.x*this.width;
     this.posY = this.opt.y*this.height;
+    this.type = this.opt.type;
+
+    this.isHover = false;
 
     this.render();
 }
@@ -24,7 +27,11 @@ Tile.prototype = {
             ctx.fillStyle = "#fff";
         }
 
-        var rect = ctx.fillRect(instance.posX, instance.posY, instance.width, instance.height);
+        if(instance.isHover){
+            ctx.fillStyle = "#555";
+        }
+
+        ctx.fillRect(instance.posX, instance.posY, instance.width, instance.height);
 
     },
 
@@ -38,13 +45,12 @@ Tile.prototype = {
             && (canvasY >= instance.posY) 
             && (canvasY < (instance.posY + instance.height)))
             {
-                // console.log(instance.posX, instance.posY);
-                // ctx.fillStyle = "#555";
-                // ctx.fillRect(instance.posX, instance.posY, instance.width, instance.height);
+                // console.log(instance.type);
+                instance.isHover = true;
             }
-        // else{
-        //     instance.render();
-        // }
+        else{
+            instance.isHover = false;
+        }
         // console.log(canvasX, canvasY);
     }
 }
