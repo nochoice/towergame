@@ -3,6 +3,8 @@ function Enemy(options, ctx){
 	this.opt = options;
 	this.x = options.x;
 	this.y = options.y;
+	this.path = options.path;
+	this.pathPosition = Math.round(Math.random()*200);
 
 	this.render();
 }
@@ -15,16 +17,19 @@ Enemy.prototype = {
 
 	    ctx.fillStyle = "#666";
 	        
-	    ctx.fillRect(instance.x, instance.y, 5, 5);
+	    ctx.fillRect(instance.x, instance.y, 10, 10);
 
 	},
 
 	move: function(){
 		var instance = this;
 
-		instance.x += Math.round(Math.random()*6 - 3);
-		instance.y += Math.round(Math.random()*6 - 3);
+		if(instance.path.length < instance.pathPosition +20) return;
 
+		instance.x = instance.path[instance.pathPosition].x;
+		instance.y = instance.path[instance.pathPosition].y;
+
+		instance.pathPosition += 5;
 		// console.log(instance.x);
 		instance.render();
 	}

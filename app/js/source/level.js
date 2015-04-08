@@ -1,5 +1,7 @@
 var Tile = require('./tile');
 var Enemy = require('./enemy');
+var Tower = require('./tower');
+var enemyMovePath = require('./enemyMovePath');
 
 
 function Level(levelObj, game){
@@ -9,6 +11,8 @@ function Level(levelObj, game){
 	this.game = game;
 	this.tiles = [];
     this.enemies = [];
+
+    this.towers = [];
 
 	this.render();
     this.tick();
@@ -22,7 +26,8 @@ Level.prototype = {
             h = instance.level.map.length,
             w = instance.level.map[0].length,
             ctx = instance.game.ctx,
-            i, j, tile;
+            i, j, tile,
+            enemyPath = enemyMovePath();
 
         for(i=0; i<h; i++){
             for(j=0; j<w; j++){
@@ -36,24 +41,48 @@ Level.prototype = {
             }
         }
 
-        for (i = 1000; i >= 0; i--) {
-            var e = new Enemy({x: Math.round(Math.random()*800), y: Math.round(Math.random()*600)}, ctx);
+        for (i = 20; i >= 0; i--) {
+            var e = new Enemy({
+                x: 0, 
+                y: 0,
+                path: enemyPath
+            }, ctx);
             instance.enemies.push(e);
         };
 
+        for (i = 5; i >= 0; i--) {
+            var t = new Tower({
+                x: Math.round(Math.random()*600), 
+                y: Math.round(Math.random()*600),
+                type: 'b'
+            }, ctx);
+
+            this.towers.push(t);
+        };
         
 	},
 
     redraw: function(){
+        
         var instance = this,
-            i;
+            i,
+            tl = instance.tiles.length,
+            el = instance.enemies.length,
+            towerl = instance.towers.length;
 
-        for(i=0; i<instance.tiles.length; i++){
+
+
+        for(i=0; i<tl; i = i + 1){
             instance.tiles[i].render();
         }
 
-        for(i=0; i<instance.enemies.length; i++){
+        for(i=0; i<el; i = i + 1){
             instance.enemies[i].move();
+        }
+
+        for(i=0; i<towerl; i = i + 1){
+            instance.towers[i].render();
+            instance.towers[i].checkEnemies(instance.enemies);
         }
 
     },
@@ -61,9 +90,10 @@ Level.prototype = {
     mouseMoveHandler: function(x, y){
         // console.log(x, y);
         var instance = this,
-            i;
+            i,
+            tl = instance.tiles.length;
 
-        for(i=0; i<instance.tiles.length; i++){
+        for(i=0; i<tl; i = i + 1){
             instance.tiles[i].hover(x, y);
         }
     },

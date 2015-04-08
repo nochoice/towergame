@@ -28,6 +28,8 @@ Game.prototype = {
 
         ctx.canvas.addEventListener('click', function(e){
             console.log(e.layerX, e.layerY);
+
+            // instance.level.enemies = [];
         });
 
         instance.ctx.canvas.addEventListener('mousemove', function(e){
